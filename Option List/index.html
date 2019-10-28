@@ -39,16 +39,19 @@
         const countryUrl = "https://restcountries.eu/rest/v2/";
         fetch(countryUrl)
             .then(response => response.json())
-            .then(countries => optionList.data = countries.map(country => new Object({ label: country.name, checked: false })));
+            .then(countries => optionList.data = countries.filter(country => country.region === 'Europe')
+                                                          .map(country => new Object({ label: country.name, checked: false })));
 
         function changeOptionType(value) {
             optionList.type = value.toLowerCase();
         }
 
         function addCarItem() {
-            let carBrand = document.getElementById('carBrand').value.trim();
+            let carBrandElem = document.getElementById('carBrand');
+            let carBrand = carBrandElem.value.trim();
             if(carBrand !== '') {
                 optionList.addItem(carBrand, false);
+                carBrandElem.value = '';
             }
         }
 
