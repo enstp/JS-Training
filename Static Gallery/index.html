@@ -1,0 +1,37 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <title>Static Gallery</title>
+        <link href="style.css" rel="stylesheet" />
+    </head>
+
+    <body>
+
+        <div class="gallery-container">
+            <!-- Here will be injected the images -->
+        </div>
+
+    </body>
+
+    <script src="script.js"></script>
+    <script>
+        let slider = new PES.StaticGallery({
+            containerSelector: '.gallery-container',
+            images: [
+                "Images/1.jpg", 
+                "Images/2.jpg",
+                "Images/3.jpg",
+                "Images/4.jpg",
+                "Images/5.jpg",
+                "Images/6.jpg",
+            ],
+            width: 1250,
+            aspectRatio: '5:3',
+            transitionEvent: 'click', // 'hover'
+            transitionDuration: 2, // in seconds
+        });
+
+    </script>
+
+</html>
