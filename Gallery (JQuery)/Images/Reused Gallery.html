@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://127.0.0.1:5500/index.html -->
+<html class="no-js" lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <title>Reused Gallery</title>
+        <link href="./Reused Gallery_files/style.css" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <div id="gallery-container" style="width: 1200px; height: 400px; display: table; position: relative;"><ul><li class="fade" style="display: block;"><img src="./Reused Gallery_files/1.jpg" style="max-width: 1200px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/2.jpg" style="max-width: 1200px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/3.jpg" style="max-width: 1200px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/4.jpg" style="max-width: 1200px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/5.jpg" style="max-width: 1200px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/6.jpg" style="max-width: 1200px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/7.jpg" style="max-width: 1200px; max-height: 375px;"></li></ul><a class="prev">❮</a><a class="next">❯</a><div class="dots-container" style="left: 544px;"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div>
+        <div id="gallery-container2" style="width: 600px; height: 400px; display: table; position: relative;"><ul><li class="fade" style="display: none;"><img src="./Reused Gallery_files/7.jpg" style="max-width: 600px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/6.jpg" style="max-width: 600px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/5.jpg" style="max-width: 600px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/4.jpg" style="max-width: 600px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/3.jpg" style="max-width: 600px; max-height: 375px;"></li><li class="fade" style="display: none;"><img src="./Reused Gallery_files/2.jpg" style="max-width: 600px; max-height: 375px;"></li><li class="fade" style="display: block;"><img src="./Reused Gallery_files/1.jpg" style="max-width: 600px; max-height: 375px;"></li></ul><a class="prev">❮</a><a class="next">❯</a><div class="dots-container" style="left: 244px;"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span></div></div>
+
+    <!-- Code injected by live-server -->
+<script type="text/javascript">
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+    <script src="./Reused Gallery_files/jquery.min.js.download"></script>
+    <script src="./Reused Gallery_files/JQuery Gallery.js.download"></script>
+    <script>
+
+        let images = [
+            "Images/1.jpg",
+            "Images/2.jpg",
+            "Images/3.jpg",
+            "Images/4.jpg",
+            "Images/5.jpg",
+            "Images/6.jpg",
+            "Images/7.jpg"
+        ];
+
+        $('#gallery-container').PESGallery({
+            width: 1200,
+            height: 400,
+            interval: 2000,
+            images: images,
+        });
+
+        $('#gallery-container2').PESGallery({
+            images: images.reverse(),
+        });
+
+    </script>
+
+</body></html>

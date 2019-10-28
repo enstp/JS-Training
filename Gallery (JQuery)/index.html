@@ -1,0 +1,39 @@
+
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <title>Reused Gallery</title>
+        <link href="style.css" rel="stylesheet" />
+    </head>
+
+    <body>
+
+        <div class="gallery-container"></div>
+
+    </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="JQuery Gallery.js"></script>
+    <script>
+
+        let images = [
+            "Images/1.jpg",
+            "Images/2.jpg",
+            "Images/3.jpg",
+            "Images/4.jpg",
+            "Images/5.jpg",
+            "Images/6.jpg",
+            "Images/7.jpg"
+        ];
+
+        var pesGallery = $('.gallery-container').PESGallery({
+            width: 600,
+            height: 400,
+            interval: 2000,
+            images: images,
+        });
+
+    </script>
+
+</html>
