@@ -1,0 +1,57 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <title>Image Comparaison Slider</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="style.css" rel="stylesheet" />
+    </head>
+
+    <body class="container">
+
+        <div class="row">
+            <select class="col-md-3 form-control" onchange="changeOptionType(this.value)">
+                <option>Checkbox</option>
+                <option>Radio</option>
+            </select>
+            <div class="col-md-2"></div>
+
+            <div class="col-md-7">
+                <input class="form-control" type="text" id ="carBrand" placeholder ="Add your favourite country.." />
+                <button class="btn btn-primary" onclick="addCarItem()">Add</button>
+
+                <div id="option-list">
+                    <!-- Here will be injected the list of options -->
+                </div>
+            </div>    
+            
+        </div>
+
+    </body>
+
+    <script src="script.js"></script>
+    <script>
+        "use strict";
+        
+        let optionList = new PES.OptionList('#option-list');
+        optionList.type = 'checkbox'; // 'radio'
+
+        const countryUrl = "https://restcountries.eu/rest/v2/";
+        fetch(countryUrl)
+            .then(response => response.json())
+            .then(countries => optionList.data = countries.map(country => new Object({ label: country.name, checked: false })));
+
+        function changeOptionType(value) {
+            optionList.type = value.toLowerCase();
+        }
+
+        function addCarItem() {
+            let carBrand = document.getElementById('carBrand').value.trim();
+            if(carBrand !== '') {
+                optionList.addItem(carBrand, false);
+            }
+        }
+
+    </script>
+
+</html>

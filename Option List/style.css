@@ -1,0 +1,11 @@
+.container {
+    margin-top: 2%;
+}
+
+#option-list {
+    margin-top: 30px;
+}
+
+#option-list label {
+    cursor: pointer;
+}
