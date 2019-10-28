@@ -1,0 +1,82 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <title>Game Of Life</title>
+        <link href="style.css" rel="stylesheet" />
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="page-container">
+            <div id="gol-container">
+                <!-- Here will be injected the Game Of Life -->
+            </div>
+            <div id="settings" class="text-center">
+                <select id="shapes" class="custom-select" onchange="gameOfLife.changeShape(this)">
+                    <option>Clear</option>
+                    <option selected>Glider</option>
+                    <option>Small Exploder</option>
+                    <option>Exploder</option>
+                    <option>10 Cell Row</option>
+                    <option>Lightweight spaceship</option>
+                    <option>Tumbler</option>
+                    <option>Gosper Glider Gun</option>
+                </select>
+
+                <button id="start" type="button" class="btn btn-primary" onclick="gameOfLife.start()">Start</button>
+                <button id="stop" type="button" class="btn btn-success" onclick="gameOfLife.stop()" disabled>Stop</button>
+                <button id="next" type="button" class="btn btn-success" onclick="gameOfLife.moveNext()">Next</button>
+
+                <label for="speed-dial">Speed</label>
+                <input id="speed-dial" type="range" class="custom-range" min="1" max="100" step="1" value="1" title="Speed dial" aria-label="Speed dial" onchange="gameOfLife.changeSpeed(this)">
+
+                <label for="speed-dial">Size</label>
+                <input id="size-dial" type="range" class="custom-range" min="5" max="100" step="1" value="15" title="Size dial" aria-label="Size dial" onchange="gameOfLife.changeSize(this)">
+            </div>
+        </div>
+    </body>
+
+    <script src="matrix.js"></script>
+    <script src="Models/contentModel.js"></script>   
+    <script src="Models/canvas.js"></script>
+    <script src="Models/font.js"></script>
+    <script src="script.js"></script>
+    <script>
+        "use strict";
+
+        var gameOfLife = new GoL({
+            containerSelector: '#gol-container',
+            style: 'canvas', // or 'font'
+            speed: 1, // secondsTimeout
+            cellSize: 20 // in px
+        });
+
+        document.getElementById("start").addEventListener("click", prepareStart);
+        document.getElementById("stop").addEventListener("click", prepareStop);
+
+        function prepareStart(ev) {
+            disableById(ev.currentTarget.id);            
+            enableById('stop');
+            disableById('next');
+        }
+
+        function prepareStop(ev) {
+            disableById(ev.currentTarget.id);       
+            enableById('start');
+            enableById('next');
+        }
+
+        // #region Helper Methods
+
+        function enableById(id){
+            document.getElementById(id).removeAttribute('disabled');
+        }
+        function disableById(id){
+            document.getElementById(id).setAttribute('disabled', 'disabled');
+        }
+
+        // #endregion
+
+    </script>
+</html>
