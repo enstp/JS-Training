@@ -1,0 +1,33 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <title>Image Comparaison Slider</title>
+        <link href="style.css" rel="stylesheet" />
+    </head>
+
+    <body>
+
+        <div id="slider-container">
+            <!-- Here will be injected the image comparaison slider -->
+        </div>
+
+    </body>
+
+    <script src="script.js"></script>
+    <script>
+        
+        let slider = new PES.ImageComparaisonSlider({
+            containerSelector: '#slider-container',
+            images: [
+                "Images/left.jpg", 
+                "Images/right.jpg"
+            ],
+            width: 900,
+            height: 600
+        });
+        slider.generate();
+
+    </script>
+
+</html>
