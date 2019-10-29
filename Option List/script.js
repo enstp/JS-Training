@@ -2,8 +2,8 @@
 var PES = PES || {};
 
 PES.OptionList = class {
-    constructor(containerSelector){
-        this.container = document.querySelector(containerSelector);
+    constructor(containerSelector) {
+        this.containers = document.querySelectorAll(containerSelector);
 
         // Capture events
         this._onChangeInputOption = this._onChangeInputOption.bind(this);
@@ -19,16 +19,15 @@ PES.OptionList = class {
 
     set type(value) { 
         if(value == 'radio' || value == 'checkbox') {
-            this.container.innerHTML = '';
             this.itemType = value;
-            this._construct();
+            this._runOnContainers(this._construct.bind(this));
         }
     }
 
     set data(value){
         if(value.constructor == Array) {
             this.itemCollection = value;
-            this._construct();
+            this._runOnContainers(this._construct.bind(this));
         }
     }
 
@@ -42,32 +41,35 @@ PES.OptionList = class {
 
         this.itemCollection.push(item);
         let lastItemIndex = this.itemCollection.length - 1;
-        let itemElem = this._createItemElem(item, lastItemIndex);
-        this.container.appendChild(itemElem);
+        this._runOnContainers((container, containerIndex) => {
+            let itemElem = this._createItemElem(container, containerIndex, item, lastItemIndex);
+            container.appendChild(itemElem);
+        });
     }
 
-    _construct() {
+    _construct(container, containerIndex) {
+        container.innerHTML = '';
         this.itemCollection.forEach((item, index) => {
-            let itemElem = this._createItemElem(item, index);
-            this.container.appendChild(itemElem);
+            let itemElem = this._createItemElem(container, containerIndex, item, index);
+            container.appendChild(itemElem);
         });
 
-        if(this.itemType === 'radio' && this._noInputChecked()) {
+        if(this.itemType === 'radio' && this._noInputChecked(container)) {
             if(this.itemCollection.length > 0) {
                 // Mark the first radio button checked as default
                 this.itemCollection[0].checked = true;
-                this.container.querySelector('input').setAttribute('checked', 'checked');
+                container.querySelector('input').setAttribute('checked', 'checked');
             }
         }
     }
 
-    _createItemElem(item, index) {
+    _createItemElem(container, containerIndex, item, index) {
         let type = this.type;
-        let idAttr = `${type}-${index}`;
+        let idAttr = `${containerIndex}-${type}-${index}`;
         let itemElem = document.createElement('div');
         itemElem.className += `custom-control custom-${type}`;
 
-        let inputElem = this._createInput(type, item.checked);
+        let inputElem = this._createInput(container, containerIndex, type, item.checked);
         inputElem.setAttribute('id', idAttr);
         inputElem.addEventListener('change', this._onChangeInputOption)
         itemElem.appendChild(inputElem);
@@ -77,19 +79,19 @@ PES.OptionList = class {
         return itemElem;
     }
 
-    _createInput(type, checked) {
+    _createInput(container, containerIndex, type, checked) {
         let inputElem = document.createElement('input');
         inputElem.setAttribute('type', type);
         inputElem.className += 'custom-control-input';
 
         if(checked) {
-            if(type === 'checkbox' || this._noInputChecked()) {
+            if(type === 'checkbox' || this._noInputChecked(container)) {
                 inputElem.setAttribute('checked', 'checked');
             } 
         }
 
         if (type === 'radio') {
-            inputElem.setAttribute('name', 'radio-group');
+            inputElem.setAttribute('name', `radio-group-${containerIndex}`);
         }
 
         return inputElem;
@@ -107,23 +109,28 @@ PES.OptionList = class {
         let checked = e.currentTarget.checked;
         let label = e.currentTarget.nextSibling.innerHTML;
         
-        this._updateItemData(e.currentTarget, checked);
+        let container = e.currentTarget.parentElement.parentElement
+        this._updateItemData(container, e.currentTarget, checked);
     }
 
-    _noInputChecked() {
-        let inputsAlreadyChecked = this._getInputElements().filter(elem => elem.getAttribute('checked') === 'checked');
+    _noInputChecked(container) {
+        let inputsAlreadyChecked = this._getInputElements(container).filter(elem => elem.getAttribute('checked') === 'checked');
         return inputsAlreadyChecked.length === 0;
     }
 
-    _getInputElements() {
-        let inputElements = this.container.querySelectorAll('input');
+    _getInputElements(container) {
+        let inputElements = container.querySelectorAll('input');
         return [...inputElements];
     }
 
-    _updateItemData(iputTarget, checked) {
-        var currentElementIndex = this._getInputElements().indexOf(iputTarget);
+    _updateItemData(container, iputTarget, checked) {
+        var currentElementIndex = this._getInputElements(container).indexOf(iputTarget);
 
         let itemData = this.itemCollection[currentElementIndex];
         itemData.checked = checked;
+    }
+
+    _runOnContainers(callback) {
+        this.containers.forEach(callback);
     }
 }
