@@ -27,7 +27,9 @@ PES.StaticGallery = class {
         this.container.style.width = `${this.options.width}px`;
         
         // Add the list of images within their wrappers, into the container element
+        let fragment = document.createDocumentFragment();
         this.options.images.forEach((image, index) => {
+
             let imageWrapperElem = document.createElement("div");
             imageWrapperElem.classList.add('image-wrapper');
             imageWrapperElem.style.transition = `flex-grow ${this.options.transitionDuration}s linear`;
@@ -37,9 +39,10 @@ PES.StaticGallery = class {
             imageWrapperElem.appendChild(imageElem);
             
             imageWrapperElem.addEventListener(this.options.transitionEvent, this._onImageWrapperChange);
-
-            this.container.appendChild(imageWrapperElem);
+            fragment.appendChild(imageWrapperElem);
         });
+
+        this.container.appendChild(fragment);
     }
 
     _configOptions(config) {
