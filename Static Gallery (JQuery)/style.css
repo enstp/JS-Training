@@ -1,0 +1,18 @@
+.gallery-container {
+    display: flex;
+}
+
+.image-wrapper {
+    width: 100px;
+    overflow: hidden;
+    left: auto;
+    cursor: pointer;
+
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+.foreground {
+    flex-grow: 600;
+}
