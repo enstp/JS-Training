@@ -1,9 +1,5 @@
 .gallery-container {
-    width: 1250px;
-    height: 450px;
-    word-spacing: -4px;
     display: flex;
-    flex-flow: row wrap;
 }
 
 .image-wrapper {

@@ -30,7 +30,7 @@ PES.StaticGallery = class {
         this.options.images.forEach((image, index) => {
             let imageWrapperElem = document.createElement("div");
             imageWrapperElem.classList.add('image-wrapper');
-            imageWrapperElem.style.transition = `all ${this.options.transitionDuration}s linear`;
+            imageWrapperElem.style.transition = `flex-grow ${this.options.transitionDuration}s linear`;
             
             let imageElem = document.createElement("img");
             imageElem.src = image;
