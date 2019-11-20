@@ -248,6 +248,8 @@ PES.Tetris.PlayGround = class {
         }
     }
 
+    // #region Event Handlers
+
     _onContainerFocus(e) {
         e.currentTarget.style.boxShadow = '10px 20px 30px blue';
     }
@@ -255,6 +257,8 @@ PES.Tetris.PlayGround = class {
     _onContainerFocusOut(e) {
         e.currentTarget.style.boxShadow = '';
     }
+
+    // #endregion
 
     // #region Game Logic
 
@@ -267,21 +271,30 @@ PES.Tetris.PlayGround = class {
     }
 
     _movePiece(direction) {
-        if(this.grid.isColumnOccupied(this.restlessCell.getY())) {
+        let restlessCellY = this.restlessCell.getY();
+        let restlessCellX = this.restlessCell.getX();
+
+        if(this.grid.isColumnOccupied(restlessCellY)) {
             let gridIsFull = this.grid.isOccupied();
             this.finishGame(gridIsFull);
         } else if(this._validateNextMove(direction)) {
             let nextCell = this._retrieveNextCell(direction);
             let nextCellOccupied = nextCell.getState() === PES.Constants.cellStates.occupied;
             if(nextCellOccupied) {
-                this._addPieceToGame(); // add a new Piece to the game
+                this._addPieceToGame(); // add a new Piece to the game               
             } else {
                 this.restlessCell.setState(PES.Constants.cellStates.free);
                 this.restlessCell = nextCell;
                 this.restlessCell.setState(PES.Constants.cellStates.occupied);
             }
         } else if (direction === PES.Constants.allowedMoves.down) {
-            this._addPieceToGame(); // add a new Piece to the game
+            if(this.grid.isRowOccupied(restlessCellX)) {
+                let gridContainer = this.container.querySelector('.tetris-grid');
+                this.grid.purgeLastRow(gridContainer);
+            }
+
+            // add a new Piece to the game
+            this._addPieceToGame();
         }
         
     }

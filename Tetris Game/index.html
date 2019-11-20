@@ -12,7 +12,9 @@
            <!-- Here will be injected the Tetris Game -->
         </div>
 
-        <span>Configure Mod dark/white!!!</span>
+        <div class="tetris-container" style="left: 500px">
+                <!-- Here will be injected the Tetris Game -->
+             </div>
     </body>
 
     <script src="Models/cell.js"></script>   
@@ -28,10 +30,10 @@
 
         var tetrisGame = new PES.Tetris({
             containerSelector: '.tetris-container',
-            speed: 0.1, // secondsTimeout
-            rows: 18,
-            columns: 15,
-            cellWidth: 20 // in px
+            speed: 0.5, // timeout i seconds
+            rows: 12,
+            columns: 10,
+            cellWidth: 30 // in px
         });
 
     </script>
