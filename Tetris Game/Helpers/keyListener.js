@@ -7,11 +7,11 @@ class KeyListener {
     }
 
     start() {
-        this.eventTarget.addEventListener('keyup', this._listen);
+        this.eventTarget.addEventListener('keydown', this._listen);
     }
 
     stop() {
-        this.eventTarget.removeEventListener('keyup', this._listen);
+        this.eventTarget.removeEventListener('keydown', this._listen);
     }
 
     _listen(keyEvent)
