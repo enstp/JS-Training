@@ -280,12 +280,12 @@ PES.Tetris.PlayGround = class {
         } else if(this._validateNextMove(direction)) {
             let nextCell = this._retrieveNextCell(direction);
             let nextCellOccupied = nextCell.getState() === PES.Constants.cellStates.occupied;
-            if(nextCellOccupied) {
-                this._addPieceToGame(); // add a new Piece to the game               
-            } else {
+            if(!nextCellOccupied) {
                 this.restlessCell.setState(PES.Constants.cellStates.free);
                 this.restlessCell = nextCell;
                 this.restlessCell.setState(PES.Constants.cellStates.occupied);
+            } else if (direction === PES.Constants.allowedMoves.down) {
+                this._addPieceToGame(); // add a new Piece to the game               
             }
         } else if (direction === PES.Constants.allowedMoves.down) {
             if(this.grid.isRowOccupied(restlessCellX)) {
