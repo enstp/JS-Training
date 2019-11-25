@@ -70,7 +70,7 @@ class GoL {
           };
  
         if(config) {
-            Object.assign(this.options, this.options, config);
+            Object.assign(this.options, config);
         }
     }
 
