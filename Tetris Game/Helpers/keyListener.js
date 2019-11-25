@@ -1,4 +1,6 @@
-class KeyListener {
+var PES = PES || {};
+
+PES.KeyListener = class {
     constructor(eventTarget, handler) {
         this.eventTarget = eventTarget;
         this.handler = handler;
@@ -16,9 +18,13 @@ class KeyListener {
 
     _listen(keyEvent)
     {
+        this.handler(keyEvent.keyCode);
+
+
         switch (keyEvent.keyCode)
         {
-            case 37:                  
+            case 37:                 
+                // APE deci am incercat sa facem un KeyListener generic aici ii omoram flexibilitatea...
                 this.handler(PES.Constants.allowedMoves.left);
                 break;
             case 39:

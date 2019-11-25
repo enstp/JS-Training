@@ -24,7 +24,7 @@ PES.Tetris = class {
           };
  
         if(config) {
-            Object.assign(this.options, this.options, config);
+            Object.assign(this.options, config);
         }
     }
 }
@@ -141,7 +141,6 @@ PES.Tetris.PlayGround = class {
         this.container.appendChild(fragment);
         
         this.container.setAttribute('tabindex', '0');
-        this.container.style.height = `${gridDiv.offsetHeight + controlsDiv.offsetHeight + 15}px`;
     }
 
     _createGrid() {
@@ -211,6 +210,7 @@ PES.Tetris.PlayGround = class {
         speedDial.min = '1';
         speedDial.max = '100';
         speedDial.title = 'Speed dial';
+        speedDial.value = 1 / this.speed
         speedDial.attributes['aria-label'] = 'Speed dial';
         speedDial.addEventListener('change', this._changeSpeed);
         speedDialContainer.appendChild(speedDial);
@@ -305,9 +305,9 @@ PES.Tetris.PlayGround = class {
 
         return this._runAccordingDirection(
             direction,
-            () => this.grid[restlessCellX][restlessCellY - 1],
-            () => this.grid[restlessCellX][restlessCellY + 1],
-            () => this.grid[restlessCellX + 1][restlessCellY]);
+            this.grid[restlessCellX][restlessCellY - 1],
+            this.grid[restlessCellX][restlessCellY + 1],
+            this.grid[restlessCellX + 1][restlessCellY]);
     }
 
     _validateNextMove(direction) {
@@ -316,19 +316,19 @@ PES.Tetris.PlayGround = class {
 
         return this._runAccordingDirection(
             direction,
-            () => restlessCellY > 0,
-            () => restlessCellY < this.grid.width,
-            () => restlessCellX < this.grid.height - 1);
+            restlessCellY > 0,
+            restlessCellY < this.grid.width,
+            restlessCellX < this.grid.height - 1);
     }
 
-    _runAccordingDirection(direction, leftCalback, rightCalback, downCalback) {
+    _runAccordingDirection(direction, leftResult, rightResult, downResult) {
         switch(direction) {
             case PES.Constants.allowedMoves.left:
-                return leftCalback();
+                return leftResult;
             case PES.Constants.allowedMoves.right:
-                return rightCalback();
+                return rightResult;
             case PES.Constants.allowedMoves.down:
-                return downCalback();
+                return downResult;
         }
     }
 

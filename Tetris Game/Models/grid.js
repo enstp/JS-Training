@@ -1,6 +1,7 @@
 class Grid extends Array {
     constructor(rows) {
         super(rows);
+        PES.Utils.mixin(this.prototype, new PES.EventTarget());
     }
 
     get width() { 
@@ -20,6 +21,12 @@ class Grid extends Array {
         for (let i = 0; i < this.height; ++i) {
             this[i] = this._buildRow(i, columns);
         }
+
+        this.addListener(
+            "moveLeft",
+            cell => {
+                
+            })
     }
 
     reset() {

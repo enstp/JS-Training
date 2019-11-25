@@ -10,7 +10,7 @@
 }
 
 .tetris-controls {
-    margin-top: 8px;
+    margin: 8px 0;
 }
 
 .tetris-controls button:first-child {
