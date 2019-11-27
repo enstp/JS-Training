@@ -1,6 +1,4 @@
-var PES = PES || {};
-
-PES.EventTarget = class {
+class EventTarget {
     constructor() {
 
     }

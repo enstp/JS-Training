@@ -1,39 +1,57 @@
- // Cell Object
- function Cell(x, y) {
-   let cellDiv = '';
-   let cellState = PES.Constants.cellStates.free;
-   let cellFreeColor = PES.Constants.cellColors.free;
-   let cellOccupiedColor = PES.Constants.cellColors.occupied;
+class Cell {
+   constructor(x, y, width) {
+      this._x = x;
+      this._y = y;
+      this._cellDiv = this._buildCellHtml(width);
+      this._cellState = PES.Constants.cellStates.free;
+      this._cellFreeColor = PES.Constants.cellColors.free;
+      this._cellOccupiedColor = PES.Constants.cellColors.occupied;
+   }
 
-   let mark = () => cellDiv.style.backgroundColor = cellOccupiedColor;
-   let unmark = () => cellDiv.style.backgroundColor = cellFreeColor;
+   get x() {
+      return this._x;
+   }
 
-   this.getX = () => x;
-   this.getY = () => y;
+   get y() {
+      return this._y;
+   }
 
-   this.getState = () => cellState;
-   this.setState = value => {
-      cellState = value;
+   get HTML() {
+      return this._cellDiv;
+   }
 
-      if(cellState === PES.Constants.cellStates.free) {
-         unmark();
-      } else if (cellState === PES.Constants.cellStates.occupied) {
-         mark();
+   get state() {
+      return this._cellState;
+   }
+
+   set state(value) {
+      this._cellState = value;
+      if(this.state === PES.Constants.cellStates.free) {
+         this._unmark();
+      } else if (this.state === PES.Constants.cellStates.occupied) {
+         this._mark();
       }
    }
 
-   this.buildCellHtml = size => {
-      cellDiv = document.createElement('div');
-      cellDiv.classList += `cell`;
-      cellDiv.style.width = `${size}px`;
-      cellDiv.style.height = `${size}px`;
+   _buildCellHtml(size) {
+      let elem = document.createElement('div');
+      elem.classList += `cell`;
+      elem.style.width = `${size}px`;
+      elem.style.height = `${size}px`;
+      return elem;
    }
 
-   this.swapColor = () => {
-      let swapColor = cellFreeColor;
-      cellFreeColor = cellOccupiedColor;
-      cellOccupiedColor = swapColor;
+   swapColor() {
+      let swapColor = this._cellFreeColor;
+      this._cellFreeColor = this._cellOccupiedColor;
+      this._cellOccupiedColor = swapColor;
    }
-   
-   this.getHtml = () => cellDiv;
+
+   _mark() {
+      this.HTML.style.backgroundColor = this._cellOccupiedColor;
+   } 
+
+   _unmark() {
+      this.HTML.style.backgroundColor = this._cellFreeColor;
+   } 
 }

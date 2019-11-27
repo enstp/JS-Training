@@ -1,7 +1,6 @@
 class Grid extends Array {
     constructor(rows) {
         super(rows);
-        PES.Utils.mixin(this.prototype, new PES.EventTarget());
     }
 
     get width() { 
@@ -21,46 +20,22 @@ class Grid extends Array {
         for (let i = 0; i < this.height; ++i) {
             this[i] = this._buildRow(i, columns);
         }
-
-        this.addListener(
-            "moveLeft",
-            cell => {
-                
-            })
     }
 
-    reset() {
-        this.forEach(rows => rows.forEach(cell => cell.setState(PES.Constants.cellStates.free)));
-    }
-
-    purgeLastRow(container) {
-        this.removeFromContainer(container);
-
+    popPush() {
         this.pop();
         let newRow = this._buildRow(0, this.width);
         this.unshift(newRow);
-
         this._refresh();
-
-        this.appendToContainer(container);
-    }
-
-    swapLayout() {
-        this.forEach(rows => rows.forEach(cell => cell.swapColor()));
-        this.forEach(rows => rows.forEach(cell => cell.setState(cell.getState())));
-    }
-
-    appendToContainer(container) {
-        this.forEach(rows => rows.forEach(cell => container.appendChild(cell.getHtml())));
     }
 
     removeFromContainer(container) {
-        this.forEach(rows => rows.forEach(cell => container.removeChild(cell.getHtml())));
+        this.forEach(rows => rows.forEach(cell => container.removeChild(cell.HTML)));
     }
 
     isColumnOccupied(columnIndex) {
         for(let rowInd = 0; rowInd < this.height; ++rowInd) {
-            if(this[rowInd][columnIndex].getState() === PES.Constants.cellStates.free) {
+            if(this[rowInd][columnIndex].state === PES.Constants.cellStates.free) {
                 return false;
             }
         }
@@ -70,21 +45,11 @@ class Grid extends Array {
 
     isRowOccupied(rowIndex) {
         for(let colIndex = 0; colIndex < this.width; ++colIndex) {
-            if(this[rowIndex][colIndex].getState() === PES.Constants.cellStates.free) {
+            if(this[rowIndex][colIndex].state === PES.Constants.cellStates.free) {
                 return false;
             }
         }
         
-        return true;
-    }
-
-    isOccupied() {
-        for(let i = 0; i < this.width; ++i ){
-            if(!this.isColumnOccupied(i)) {
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -102,16 +67,15 @@ class Grid extends Array {
     }
 
     _buildCell(i, j, state) {
-        let cell = new Cell(i, j);
-        cell.buildCellHtml(this.cellWidth);
-        cell.setState(state);
+        let cell = new Cell(i, j, this.cellWidth);
+        cell.state = state;
         return cell;
     }
 
     _refresh() {
         for (let i = 0; i < this.height; ++i) {
             for (let j = 0; j < this.width; ++j) {
-                let state = this[i][j].getState()
+                let state = this[i][j].state;
                 this[i][j] = this._buildCell(i, j, state);
             }
         }

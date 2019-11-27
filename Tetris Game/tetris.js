@@ -37,35 +37,32 @@ PES.Tetris.PlayGround = class {
         this.columns = columns;
         this.cellWidth = cellWidth;
         this.speed = speed;
-
         this.container = container;
-        this.timer = null;
-        this.restlessCell = null;
 
         // Capture events
-        this._changeSpeed = this._changeSpeed.bind(this);
+        this._onChangeSpeed = this._onChangeSpeed.bind(this);
         this._resumeGame = this._resumeGame.bind(this);
         this._pauseGame = this._pauseGame.bind(this);
-        this._changeLayout = this._changeLayout.bind(this);
+        this._onChangeLayout = this._onChangeLayout.bind(this);
         
         // Register Events
         this.container.addEventListener('focus', this._onContainerFocus);
         this.container.addEventListener('focusout', this._onContainerFocusOut);
-        
+               
         // Prepare the Game
+        this._game = new PES.Tetris.Game(this.rows, this.columns, this.cellWidth);
         this._setupPlayGround();
-        
+
         // Init Dependencies
-        this.timer = new Timer(() => this._movePiece(PES.Constants.allowedMoves.down));
-        this.keylistener = new KeyListener(this.container, nextMove => this._movePiece(nextMove));
+        this._timer = new Timer(() => this._tryMovePiece(40));
+        this._keylistener = new KeyListener(this.container, keyCode => this._tryMovePiece(keyCode));
     }
 
     startGame() {
-        this.grid.reset();
-        this._addPieceToGame();
+        this._game.start();
+        this._timer.start(this.speed);
+        this._keylistener.start();
 
-        this.timer.start(this.speed);
-        this.keylistener.start();
         this._toggleControls(true);
         this.container.focus();
 
@@ -73,67 +70,24 @@ PES.Tetris.PlayGround = class {
         overlayedDiv.style.display = 'none';
     }
 
-    _resumeGame() {
-        let overlayedDiv = this.container.getElementsByClassName('overlay')[0];
-        if(overlayedDiv.style.display === 'table') {
-            overlayedDiv.style.display = 'none';
-            this.grid.reset();
-        }
-
-        this.timer.start(this.speed);
-        this.keylistener.start();
-        this._toggleControls(true);
-        this.container.focus();
-
-        let startButton = this.container.querySelector('#start');
-        startButton.innerHTML = 'Start';
-    }
-
-    _pauseGame() {
-        this.timer.stop();
-        this.keylistener.stop();
-        this._toggleControls(false);
-
-        let startButton = this.container.querySelector('#start');
-        startButton.innerHTML = 'Resume';
-    }
-
-    finishGame(success) {
-        this.timer.stop();
-        this.keylistener.stop();
+    _finishGame() {
+        this._timer.stop();
+        this._keylistener.stop();
         this._toggleControls(false);
 
         // Create game over text
         let overlayedDiv = this.container.getElementsByClassName('overlay')[0];
         overlayedDiv.style.display = 'table';
 
-        let gameSuccessLabel = overlayedDiv.getElementsByClassName('game-success')[0];
-        gameSuccessLabel.style.display = success ? 'table-cell' : 'none';
         let gameOverLabel = overlayedDiv.getElementsByClassName('game-over')[0]
-        gameOverLabel.style.display = success ? 'none' : 'table-cell';
-    }
-
-    _changeSpeed(e) {
-        let rangeVal = parseInt(e.currentTarget.value);
-        this.speed = 1 / rangeVal;
-
-        this._pauseGame();
-        this._resumeGame();
-    }
-
-    _changeLayout(e) {
-        e.currentTarget.blur();
-        this.grid.swapLayout();
+        gameOverLabel.style.display = 'table-cell';
     }
 
     _setupPlayGround() {
-        this.grid = new Grid(this.rows);
-        this.grid.init(this.columns, this.cellWidth);
-
         var fragment = document.createDocumentFragment();
 
         let gridDiv = this._createGrid();
-        this.grid.appendToContainer(gridDiv);
+        this._game.appendToContainer(gridDiv);
         let controlsDiv = this._createControls();
 
         fragment.appendChild(gridDiv);
@@ -159,14 +113,9 @@ PES.Tetris.PlayGround = class {
         overlayedDiv.style.height = gridWidth;
 
         // Create game status labels
-        let successGameStatusSpan = document.createElement('span');
-        successGameStatusSpan.classList += 'game-status game-success';
-        successGameStatusSpan.innerHTML = "Congrats!";
-        successGameStatusSpan.style.color = 'green';
-        overlayedDiv.appendChild(successGameStatusSpan);
         let failGameStatusSpan = document.createElement('span');
         failGameStatusSpan.classList += 'game-status game-over';
-        failGameStatusSpan.innerHTML = "Your're out!";
+        failGameStatusSpan.innerHTML = "Game over!";
         overlayedDiv.appendChild(failGameStatusSpan);
         
         gridDiv.appendChild(overlayedDiv);
@@ -210,16 +159,16 @@ PES.Tetris.PlayGround = class {
         speedDial.min = '1';
         speedDial.max = '100';
         speedDial.title = 'Speed dial';
-        speedDial.value = 1 / this.speed
+        speedDial.value = 1 / this.speed;
         speedDial.attributes['aria-label'] = 'Speed dial';
-        speedDial.addEventListener('change', this._changeSpeed);
+        speedDial.addEventListener('change', this._onChangeSpeed);
         speedDialContainer.appendChild(speedDial);
 
         // Layout Customization
         let layoutSelect = document.createElement('select');
         layoutSelect.id = 'layout';
         layoutSelect.classList += 'custom-select';
-        layoutSelect.addEventListener('change', this._changeLayout);
+        layoutSelect.addEventListener('change', this._onChangeLayout);
         let darkLayoutOption = document.createElement('option');
         darkLayoutOption.innerHTML = 'white';
         let whiteLayoutOption = document.createElement('option');
@@ -248,6 +197,19 @@ PES.Tetris.PlayGround = class {
         }
     }
 
+    _tryMovePiece(keyCode) {
+        if(!this._game.canProceed) {
+            this._finishGame();
+        } else {
+            let gridContainer = this.container.querySelector('.tetris-grid');
+            switch(keyCode) {
+                case 37: this._game.fire({ type: 'moveLeft' }); break;
+                case 39: this._game.fire({ type: 'moveRight' }); break;
+                case 40: this._game.fire({ type: 'moveDown', data: gridContainer }); break;
+            }
+        }
+    }
+
     // #region Event Handlers
 
     _onContainerFocus(e) {
@@ -258,79 +220,139 @@ PES.Tetris.PlayGround = class {
         e.currentTarget.style.boxShadow = '';
     }
 
-    // #endregion
-
-    // #region Game Logic
-
-    _addPieceToGame() {
-        let defaultX = 0;
-        let defaultY = Math.floor(this.columns / 2);
-        
-        this.restlessCell = this.grid[defaultX][defaultY];
-        this.restlessCell.setState(PES.Constants.cellStates.occupied);
-    }
-
-    _movePiece(direction) {
-        let restlessCellY = this.restlessCell.getY();
-        let restlessCellX = this.restlessCell.getX();
-
-        if(this.grid.isColumnOccupied(restlessCellY)) {
-            let gridIsFull = this.grid.isOccupied();
-            this.finishGame(gridIsFull);
-        } else if(this._validateNextMove(direction)) {
-            let nextCell = this._retrieveNextCell(direction);
-            let nextCellOccupied = nextCell.getState() === PES.Constants.cellStates.occupied;
-            if(!nextCellOccupied) {
-                this.restlessCell.setState(PES.Constants.cellStates.free);
-                this.restlessCell = nextCell;
-                this.restlessCell.setState(PES.Constants.cellStates.occupied);
-            } else if (direction === PES.Constants.allowedMoves.down) {
-                this._addPieceToGame(); // add a new Piece to the game               
-            }
-        } else if (direction === PES.Constants.allowedMoves.down) {
-            if(this.grid.isRowOccupied(restlessCellX)) {
-                let gridContainer = this.container.querySelector('.tetris-grid');
-                this.grid.purgeLastRow(gridContainer);
-            }
-
-            // add a new Piece to the game
-            this._addPieceToGame();
+    _resumeGame() {
+        let overlayedDiv = this.container.getElementsByClassName('overlay')[0];
+        if(overlayedDiv.style.display === 'table') {
+            overlayedDiv.style.display = 'none';
+            this._game.reset();
         }
-        
+
+        this._timer.start(this.speed);
+        this._keylistener.start();
+
+        this._toggleControls(true);
+        this.container.focus();
+
+        let startButton = this.container.querySelector('#start');
+        startButton.innerHTML = 'Start';
     }
 
-    _retrieveNextCell(direction) {
-        let restlessCellX = this.restlessCell.getX();
-        let restlessCellY = this.restlessCell.getY();
+    _pauseGame() {
+        this._timer.stop();
+        this._keylistener.stop();
+        this._toggleControls(false);
 
-        return this._runAccordingDirection(
-            direction,
-            this.grid[restlessCellX][restlessCellY - 1],
-            this.grid[restlessCellX][restlessCellY + 1],
-            this.grid[restlessCellX + 1][restlessCellY]);
+        let startButton = this.container.querySelector('#start');
+        startButton.innerHTML = 'Resume';
     }
 
-    _validateNextMove(direction) {
-        let restlessCellX = this.restlessCell.getX();
-        let restlessCellY = this.restlessCell.getY();
+    _onChangeSpeed(e) {
+        let rangeVal = parseInt(e.currentTarget.value);
+        this.speed = 1 / rangeVal;
 
-        return this._runAccordingDirection(
-            direction,
-            restlessCellY > 0,
-            restlessCellY < this.grid.width,
-            restlessCellX < this.grid.height - 1);
+        this._pauseGame();
+        this._resumeGame();
     }
 
-    _runAccordingDirection(direction, leftResult, rightResult, downResult) {
-        switch(direction) {
-            case PES.Constants.allowedMoves.left:
-                return leftResult;
-            case PES.Constants.allowedMoves.right:
-                return rightResult;
-            case PES.Constants.allowedMoves.down:
-                return downResult;
-        }
+    _onChangeLayout(e) {
+        e.currentTarget.blur();
+        this._game.swapLayout();
     }
 
     // #endregion
 }
+
+PES.Tetris.Game = class {
+    constructor(rows, columns, cellWidth) {
+        // Init Grid
+        this._grid = new Grid(rows);
+        this._grid.init(columns, cellWidth);
+        
+        // Init Events
+        Utils.mixin(Object.getPrototypeOf(this), EventTarget.prototype);
+        this.addListener("moveLeft", this._moveCellLeft);
+        this.addListener("moveRight",  this._moveCellRight);
+        this.addListener("moveDown", this._moveCellDown);
+    }
+
+    get canProceed() {
+        return !this._grid.isColumnOccupied(this.cell.y);
+    }
+
+    start() {
+        this.reset();
+        this._addPieceToGame();
+    }
+
+    reset() {
+        this._grid.forEach(rows => rows.forEach(cell => cell.state = PES.Constants.cellStates.free));
+    }
+
+    appendToContainer(container) {
+        this._grid.forEach(rows => rows.forEach(cell => container.appendChild(cell.HTML)));
+    }
+
+    removeFromContainer(container) {
+        this._grid.forEach(rows => rows.forEach(cell => container.removeChild(cell.HTML)));
+    }
+
+    swapLayout() {
+        this._grid.forEach(rows => rows.forEach(cell => cell.swapColor()));
+        this._grid.forEach(rows => rows.forEach(cell => cell.state = cell.state));
+    }
+
+    _addPieceToGame() {
+        let defaultX = 0;
+        let defaultY = Math.floor(this._grid.width / 2);
+        
+        this.cell = this._grid[defaultX][defaultY];
+        this.cell.state = PES.Constants.cellStates.occupied;
+    }
+
+    _purgeLastRow(gridContainer) {
+        this.removeFromContainer(gridContainer);
+        this._grid.popPush();
+        this.appendToContainer(gridContainer);
+    }
+
+    _moveCell(nextCell) {
+        if(nextCell.state === PES.Constants.cellStates.free) {
+            this.cell.state = PES.Constants.cellStates.free;
+            this.cell = nextCell;
+            this.cell.state = PES.Constants.cellStates.occupied;
+        }
+    }
+
+    _moveCellLeft() {
+        
+        if(this.cell.y > 0) {
+            let nextCell = this._grid[this.cell.x][this.cell.y - 1];
+            this._moveCell(nextCell);
+        }
+    }
+    
+    _moveCellRight() {
+        if(this.cell.y < this._grid.width) {
+            let nextCell = this._grid[this.cell.x][this.cell.y + 1];
+            this._moveCell(nextCell);
+        }
+    }
+
+    _moveCellDown(eventArgs) {
+        let gridContainer = eventArgs.data;
+        if(this.cell.x < this._grid.height - 1) {
+            let nextCell = this._grid[this.cell.x + 1][this.cell.y];
+            if(nextCell.state === PES.Constants.cellStates.free) {
+                this._moveCell(nextCell);
+            } else {
+                // add a new Piece to the game               
+                this._addPieceToGame(); 
+            }
+        } else if(this._grid.isRowOccupied(this.cell.x)) {
+            this._purgeLastRow(gridContainer);
+        } else {
+            // add a new Piece to the game
+		    this._addPieceToGame();
+        }
+    }
+} 
