@@ -265,8 +265,7 @@ PES.Tetris.PlayGround = class {
 PES.Tetris.Game = class {
     constructor(rows, columns, cellWidth) {
         // Init Grid
-        this._grid = new Grid(rows);
-        this._grid.init(columns, cellWidth);
+        this._grid = new Grid(rows, columns, cellWidth);
         
         // Init Events
         Utils.mixin(Object.getPrototypeOf(this), EventTarget.prototype);

@@ -1,6 +1,8 @@
 class Grid extends Array {
-    constructor(rows) {
+    constructor(rows, columns, cellWidth) {
         super(rows);
+        this.cellWidth = cellWidth;
+        this._init(rows, columns, cellWidth);
     }
 
     get width() { 
@@ -13,13 +15,6 @@ class Grid extends Array {
 
     get height() { 
         return this.length; 
-    }
-
-    init(columns, cellWidth) {
-        this.cellWidth = cellWidth;
-        for (let i = 0; i < this.height; ++i) {
-            this[i] = this._buildRow(i, columns);
-        }
     }
 
     popPush() {
@@ -56,6 +51,12 @@ class Grid extends Array {
     display() {
         console.log(this._toString());
     } 
+
+    _init(rows, columns, cellWidth) {
+        for (let i = 0; i < rows; ++i) {
+            this[i] = this._buildRow(i, columns);
+        }
+    }
 
     _buildRow(rowIndex, rowWidth) {
         let row = new Array(rowWidth);

@@ -1,4 +1,4 @@
-KeyListener = class {
+class KeyListener {
     constructor(eventTarget, handler) {
         this.eventTarget = eventTarget;
         this.handler = handler;
