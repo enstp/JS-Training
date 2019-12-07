@@ -1,0 +1,30 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <title>Chart Builder</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="style.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="chart-container">
+           <!-- Here will be injected the Cahrt Builder -->
+        </div>
+    </body>
+
+
+    <script src="chart-builder.js"></script>
+    <script>
+        "use strict";
+
+        var tetrisGame = new PES.Tetris({
+            containerSelector: '.tetris-container',
+            speed: 0.5, // timeout i seconds
+            rows: 12,
+            columns: 10,
+            cellWidth: 30 // in px
+        });
+
+    </script>
+</html>
