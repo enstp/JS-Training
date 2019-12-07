@@ -13,19 +13,18 @@
         </div>
     </body>
 
-    <script src="build/Models/cell.js"></script>   
-    <script src="build/Models/constants.js"></script>   
-    <script src="build/Models/grid.js"></script>   
+    <script src="dist/Models/cell.js"></script>   
+    <script src="dist/Models/constants.js"></script>   
+    <script src="dist/Models/grid.js"></script>   
 
-    <script src="build/Helpers/timer.js"></script>
-    <script src="build/Helpers/eventTarget.js"></script>
-    <script src="build/Helpers/utils.js"></script>
-    <script src="build/Helpers/keyListener.js"></script>
+    <script src="dist/Helpers/timer.js"></script>
+    <script src="dist/Helpers/eventTarget.js"></script>
+    <script src="dist/Helpers/utils.js"></script>
+    <script src="dist/Helpers/keyListener.js"></script>
 
-    <script src="build/tetris.js"></script>
+    <script src="dist/tetris.js"></script>
     <script>
         "use strict";
-
         var tetrisGame = new PES.Tetris({
             containerSelector: '.tetris-container',
             speed: 0.5, // timeout i seconds
@@ -33,6 +32,5 @@
             columns: 10,
             cellWidth: 30 // in px
         });
-
     </script>
 </html>

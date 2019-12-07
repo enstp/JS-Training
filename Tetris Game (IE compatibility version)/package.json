@@ -1,18 +1,21 @@
 {
   "name": "tetris-game",
   "version": "1.0.0",
-  "description": "Tetris Game",
+  "description": "Tetris game IE 11 compatible",
   "main": "index.html",
   "scripts": {
-    "build": "babel src -d build"
+    "babel": "babel src --out-dir  dist"
   },
   "author": "Paul Enascut",
   "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-builtin-extend": "^1.1.2",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "@59naga/babel-plugin-transform-array-from": "0.0.0",
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-transform-object-assign": "^7.7.4",
+    "@babel/preset-env": "^7.7.4"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.7.0"
   }
 }

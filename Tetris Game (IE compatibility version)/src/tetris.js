@@ -102,19 +102,20 @@ PES.Tetris.PlayGround = class {
         let gridWidth =  `${this.rows * this.cellWidth}px`;
 
         let gridDiv = document.createElement('div');
-        gridDiv.classList += 'tetris-grid';
+        gridDiv.classList.add('tetris-grid');
         gridDiv.style.width = gridHeight;
         gridDiv.style.height = gridWidth;
 
         // Create overlay element
         let overlayedDiv = document.createElement('div');
-        overlayedDiv.classList += 'overlay';
+        overlayedDiv.classList.add('overlay');
         overlayedDiv.style.width = gridHeight;
         overlayedDiv.style.height = gridWidth;
 
         // Create game status labels
         let failGameStatusSpan = document.createElement('span');
-        failGameStatusSpan.classList += 'game-status game-over';
+        failGameStatusSpan.classList.add('game-status');
+        failGameStatusSpan.classList.add('game-over');
         failGameStatusSpan.innerHTML = "Game over!";
         overlayedDiv.appendChild(failGameStatusSpan);
         
@@ -124,14 +125,16 @@ PES.Tetris.PlayGround = class {
 
     _createControls() {
         let controlsDiv = document.createElement('div');
-        controlsDiv.classList += 'tetris-controls text-center';
+        controlsDiv.classList.add('tetris-controls');
+        controlsDiv.classList.add('text-center');
 
         // Start Button
         let startBtn = document.createElement('button');
         startBtn.id = 'start';
         startBtn.type = 'button';
         startBtn.innerHTML = 'Start';
-        startBtn.classList += 'btn btn-primary';
+        startBtn.classList.add('btn');
+        startBtn.classList.add('btn-primary');
         startBtn.addEventListener('click', this._resumeGame);
         controlsDiv.appendChild(startBtn);
 
@@ -140,7 +143,8 @@ PES.Tetris.PlayGround = class {
         pauseBtn.id = 'pause';
         pauseBtn.type = 'button';
         pauseBtn.innerHTML = 'Pause';
-        pauseBtn.classList += 'btn btn-success';
+        pauseBtn.classList.add('btn');
+        pauseBtn.classList.add('btn-success');
         pauseBtn.addEventListener('click', this._pauseGame);
         controlsDiv.appendChild(pauseBtn);
 
@@ -155,7 +159,7 @@ PES.Tetris.PlayGround = class {
         let speedDial = document.createElement('input');
         speedDial.id = 'speed-dial'
         speedDial.type = 'range';
-        speedDial.classList += 'custom-range';
+        speedDial.classList.add('custom-range');
         speedDial.min = '1';
         speedDial.max = '100';
         speedDial.title = 'Speed dial';
@@ -167,7 +171,7 @@ PES.Tetris.PlayGround = class {
         // Layout Customization
         let layoutSelect = document.createElement('select');
         layoutSelect.id = 'layout';
-        layoutSelect.classList += 'custom-select';
+        layoutSelect.classList.add('custom-select');
         layoutSelect.addEventListener('change', this._onChangeLayout);
         let darkLayoutOption = document.createElement('option');
         darkLayoutOption.innerHTML = 'white';

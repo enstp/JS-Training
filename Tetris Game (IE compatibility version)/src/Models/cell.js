@@ -35,7 +35,7 @@ class Cell {
 
    _buildCellHtml(size) {
       let elem = document.createElement('div');
-      elem.classList += `cell`;
+      elem.classList.add(`cell`);
       elem.style.width = `${size}px`;
       elem.style.height = `${size}px`;
       return elem;

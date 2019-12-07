@@ -1,7 +1,21 @@
 {
-    "presets": [ "env" ],
-    "plugins": [
-        ["babel-plugin-transform-builtin-extend", { "globals": ["Array"] }],
-        "babel-polyfill"
+  "presets": [
+    [ 
+      "@babel/env",  
+      {
+        "targets": {
+          "edge": "17",
+          "firefox": "60",
+          "chrome": "67",
+          "safari": "11.1",
+          "ie": "10"
+        },
+        "useBuiltIns": false
+      }
     ]
+  ],
+  "plugins": [ 
+    "@babel/plugin-transform-object-assign",
+    "@59naga/babel-plugin-transform-array-from"
+  ]
 }
