@@ -17,7 +17,7 @@
     <script src="POO Gallery.js"></script>
     <script>
         
-        let galleryContainerElem = document.getElementById('gallery-container');
+        let galleryContainerElem = document.getElementById('gallery-container2');
         let images = [
             "Images/1.jpg", 
             "Images/2.jpg",
@@ -25,29 +25,12 @@
             "Images/4.jpg", 
             "Images/5.jpg", 
             "Images/6.jpg",
-            "Images/7.jpg"];
-        var galleryWidth = 600;
-        var galleryHeight = 400;
-
-        const gallery = new PES.Gallery(galleryContainerElem, images, galleryWidth, galleryHeight, 2000);
-        gallery.generate();
-
-
-
-        let galleryContainerElem2 = document.getElementById('gallery-container2');
-        let images2 = [
-            "Images/1.jpg", 
-            "Images/2.jpg",
-            "Images/3.jpg", 
-            "Images/4.jpg", 
-            "Images/5.jpg", 
-            "Images/6.jpg",
             "Images/7.jpg"].reverse();
-        var galleryWidth2 = 1000;
-        var galleryHeight2 = 500;
+        var galleryWidth = 1000;
+        var galleryHeight = 500;
 
-        const gallery2 = new PES.Gallery(galleryContainerElem2, images2, galleryWidth2, galleryHeight2, 1000);
-        gallery2.generate();
+        const gallery = new PES.Gallery(galleryContainerElem, images, galleryWidth, galleryHeight, 1000);
+        gallery.generate();
         
         
     </script>
